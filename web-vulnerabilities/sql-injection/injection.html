@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Injection</title>
+</head>
+<body>
+    <h1>SQL Injection Example</h1>
+    <p>This form does not have it's entries sanitized.</p>
+    <p>
+        The form will use the injection.php file when submitted and use the SQL query: 
+        SELECT * FROM Users WHERE user = '&lt;user_input&gt;' AND pass = '&lt;password_input&gt;'.
+    </p>
+    <p>
+        After submitting the form, the webpage will display the result of the SQL query, namely the id, user and pass fields.
+    </p>
+    <p>
+        SQL Injection can be used here to dump all rows from the database as such:
+    </p>
+    <ul>
+        <li>For the user input write any string (e.g. a)</li>
+        <li>For the password input, write: ' or ''='</li>
+    </ul>
+    <p>
+        <strong>Note:</strong> PHP and MySQL do not allow stacked queries by default. As such a DROP TABLE constructed SQL Injection query
+        does not work with the default configuration of the server.
+    </p>
+    <h2>Mitigation</h2>
+    <p>
+        In order to mitigate SQL Injection the SQL queries need to be `prepared`.
+    </p>
+    <p>
+        This form of mitigation is present in the `prepare.php` file. In order to mitigate the SQL Injection change the file from the action field
+        of the form from `injections.php` to `prepare.php`.
+    </p>
+    <form name="vuln-form" method="POST" action="injection.php">
+        <p>
+            <label for="user"></label>
+            <input type="text" name="user" id="user" placeholder="Username" required="required" />    
+        </p>
+        <p>
+            <label for="pass"></label>
+            <input type="password" name="pass" id="pass" placeholder="Password" />
+        </p>
+        <p>
+            <input type="submit" name="submit" id="submit" value="Login" />
+        </p>
+    </form>
+</body>
+</html>
